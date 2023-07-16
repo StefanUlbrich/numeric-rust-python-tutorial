@@ -18,3 +18,14 @@ cargo add ndarray -F rayon # numerical crate
 cargo add --dev tracing # for debug messages
 cargo add itertools # better handling of iterators
 ```
+
+## Initialize Python project
+
+We'll leverage [Poetry](https://python-poetry.org/) for dependency handling
+and virtual environment management
+
+```sh
+poetry init .
+poetry install
+```
+
