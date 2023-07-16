@@ -1,0 +1,9 @@
+{
+    "editor.trimAutoWhitespace": true,
+    "editor.fontFamily": "'Fira Code'",
+    "editor.fontLigatures": true,
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "editor.inlayHints.enabled": "offUnlessPressed",
+    "rust-analyzer.inlayHints.reborrowHints.enable":"mutable"
+}

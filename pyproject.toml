@@ -4,8 +4,13 @@ version = "0.1.0"
 description = "A tutorial for writing numerical Python extensions with Rust and `ndarray`"
 authors = ["Stefan Ulbrich <6009224+StefanUlbrich@users.noreply.github.com>"]
 license = "MIT"
-readme = "README.md"
-packages = [{include = "rust_python_ndarray_tutorial"}]
+readme = "Readme.md"
+packages = [{include = "gmm", from="src/python"}]
+
+[tool.poetry.scripts]
+gmm = 'gmm:run'
+bench = 'gmm:bench'
+
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
@@ -18,6 +23,9 @@ numpy = "^1.25.1"
 seaborn = "^0.12.2"
 matplotlib = "^3.7.2"
 jupyterlab = "^4.0.3"
+black = "^23.7.0"
+ruff = "^0.0.278"
+mypy = "^1.4.1"
 
 [build-system]
 requires = ["poetry-core"]
