@@ -612,18 +612,6 @@ files = [
 ]
 
 [[package]]
-name = "design-by-contract"
-version = "0.3.1"
-description = "Handy decorator to define contracts with dependency injection in Python 3.10 and above"
-category = "main"
-optional = false
-python-versions = ">=3.10,<4.0"
-files = [
-    {file = "design-by-contract-0.3.1.tar.gz", hash = "sha256:feacc898d9ab6b7b3ccc8b0eafbfd45b0fa9fe7f002ad16d0778a9a7edf57a27"},
-    {file = "design_by_contract-0.3.1-py3-none-any.whl", hash = "sha256:731781fd8b56e00c412dc7bc1652ffe1fee4cefb935d314f7bd85ca8c1330ac6"},
-]
-
-[[package]]
 name = "exceptiongroup"
 version = "1.1.2"
 description = "Backport of PEP 654 (exception groups)"
@@ -2785,4 +2773,4 @@ test = ["websockets"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "d51cbed6cb54af82db3721fdf3b37558003641d91b945cd57b555374692acac8"
+content-hash = "23c42414d27d6ba07a658e2ec9dcd6724c75f402bdaf93a52de5fd6e7204fb49"
