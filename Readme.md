@@ -10,3 +10,11 @@ cd mkdir rust-python-ndarray-tutorial
 cargo init --lib --vcs git
 ```
 
+And add a few that we will use at the beginning of the tutorial
+
+
+```sh
+cargo add ndarray -F rayon # numerical crate
+cargo add --dev tracing # for debug messages
+cargo add itertools # better handling of iterators
+```
