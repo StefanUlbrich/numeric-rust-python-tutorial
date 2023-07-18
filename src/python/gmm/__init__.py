@@ -10,6 +10,9 @@ from sklearn.datasets import make_blobs
 from scipy.stats import multivariate_normal as mvn
 import matplotlib.pyplot as plt
 
+from gmm import gmm as _gmm
+
+
 Likelihood = NewType("Likelihod", NDArray[np.float64])
 
 
@@ -42,17 +45,26 @@ def expect(gmm: GaussianMixtureModel, data: NDArray[np.float64]) -> Likelihood:
 def maximize_v0(gmm: GaussianMixtureModel, responsibilities: Likelihood, data: NDArray[np.float64]) -> None:
     """Maximization step. With loops"""
 
+    sum_responsibilities = responsibilities.sum(axis=1)
+
     gmm.means = (
         np.sum(data[np.newaxis, :, :] * responsibilities[:, :, np.newaxis], axis=1)
-        / responsibilities.sum(axis=1)[:, np.newaxis]
+        / sum_responsibilities[:, np.newaxis]
     )
 
     data = data[np.newaxis, :, :] - gmm.means[:, np.newaxis, :]
     gmm.covs = np.array([(d.T * r[np.newaxis, :] @ d) / r.sum() for r, d in zip(responsibilities, data)])
 
-    gmm.weights = responsibilities.sum(axis=1)
+    gmm.weights = sum_responsibilities
     gmm.weights /= gmm.weights.sum()
 
+
+def maximize_v2(gmm: GaussianMixtureModel, responsibilities: Likelihood, data: NDArray[np.float64]) -> None:
+
+    means, covs, weights = _gmm.maximize(data, responsibilities.T)
+    gmm.means = means
+    gmm.covs = covs
+    gmm.weights = weights
 
 def maximize(gmm: GaussianMixtureModel, responsibilities: Likelihood, data: NDArray[np.float64]) -> None:
     """Maximization step. Uses einstein sum notation to avoid loops"""
@@ -91,9 +103,9 @@ def bench():
     "Simple benchmarks"
 
     benchmark = """
-from gmm import make_blobs, initialize, expect, maximize, maximize_v0
-data, _ = make_blobs(n_samples=10000, centers=10, n_features=2, random_state=0)
-model = initialize(data, 3)
+from gmm import make_blobs, initialize, expect, maximize, maximize_v0, maximize_v2
+data, _ = make_blobs(n_samples=10000, centers=40, n_features=2, random_state=0)
+model = initialize(data, 40)
 
 r = expect(model, data)
     """
@@ -103,6 +115,9 @@ r = expect(model, data)
     print(f"With einsum — fastest: {min(res)/n}, slowest: {max(res)/n}, mean: {sum(res)/repeat/n} ")
 
     res = timeit.repeat("maximize_v0(model, r, data)", setup=benchmark, number=n, repeat=repeat)
+    print(f"With loops — fastest: {min(res)/n}, slowest: {max(res)/n}, mean: {sum(res)/repeat/n} ")
+
+    res = timeit.repeat("maximize_v2(model, r, data)", setup=benchmark, number=n, repeat=repeat)
     print(f"With loops — fastest: {min(res)/n}, slowest: {max(res)/n}, mean: {sum(res)/repeat/n} ")
 
 
