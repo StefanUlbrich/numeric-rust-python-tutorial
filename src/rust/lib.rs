@@ -1,4 +1,3 @@
-use numpy::ndarray::{ArrayD, ArrayViewD, ArrayViewMutD};
 use numpy::{IntoPyArray, PyReadonlyArray2, PyArray2, PyArray3, PyArray1};
 use pyo3::{pymodule, types::PyModule, PyResult, Python};
 
@@ -7,11 +6,35 @@ use ndarray::prelude::*;
 
 fn maximize(data: ArrayView2<f64>, responsibilities: ArrayView2<f64>) -> (Array2<f64>, Array3<f64>, Array1<f64>) {
 
+    let k = if let [_n, k] = responsibilities.shape() {
+        k
+    } else {panic!()};
+    let d = if let [_n, d] = data.shape() {
+        d
+    } else {panic!()};
+
+    let sum_responsibilities = responsibilities.sum_axis(Axis(0));
+
+    let means = (&responsibilities.slice(s![.., .., NewAxis]) * &data.slice(s![.., NewAxis, ..]))
+        .sum_axis(Axis(0))
+        / sum_responsibilities.slice(s![.., NewAxis]);
+
+    // n x k x d
+    let adjusted = &data.slice(s![.., NewAxis, ..]) - &means.slice(s![NewAxis, .., ..]);
+
+    let mut covs = Array3::<f64>::zeros((*k, *d, *d));
+
+    (adjusted.axis_iter(Axis(1)), covs.axis_iter_mut(Axis(0)), responsibilities.axis_iter(Axis(1)))
+        .into_par_iter()
+        .for_each(|(x, mut cov, resp)| {
+            let y = &x * &resp.slice(s![.., NewAxis]);
+            cov += &x.t().dot(&y);
+        });
+
+    covs = &covs / &sum_responsibilities.slice(s![..,NewAxis,NewAxis]);
 
 
-    let means= Array2::<f64>::zeros((0,0));
-    let covs= Array3::<f64>::zeros((0,0,0));
-    let weights= Array1::<f64>::zeros(0);
+    let weights = &sum_responsibilities / sum_responsibilities.sum();
 
 
     (means, covs, weights)
