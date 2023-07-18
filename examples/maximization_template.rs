@@ -32,6 +32,7 @@ fn main() {
     let (means_computed, covs_computed, weights_computed) =
         maximize(data.view(), responsibilities.view());
 
+
     println!("{}", means_computed);
 
     assert!(means_computed.abs_diff_eq(&means, 1e-9));
