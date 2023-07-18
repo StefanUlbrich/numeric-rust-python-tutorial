@@ -29,7 +29,8 @@ fn main() {
     let weights: Array1<f64> = read_npy("data/weights.npy").unwrap();
     println!("{}", weights);
 
-    let (means_computed, covs_computed, weights_computed) = maximize(data.view(), responsibilities.view());
+    let (means_computed, covs_computed, weights_computed) =
+        maximize(data.view(), responsibilities.view());
 
     println!("{}", means_computed);
 
