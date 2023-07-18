@@ -4,13 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-path = "src/rust/lib.rs" 
+path = "src/rust/lib.rs"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 itertools = "0.11.0"
-ndarray = { version = "0.15.6", features = ["rayon"] }
+ndarray = { version = "0.15.6", features = ["rayon", "approx"] }
 
 [dev-dependencies]
+ndarray-npy = "0.8.1"
 tracing = "0.1.37"

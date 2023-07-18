@@ -116,3 +116,5 @@ def make_data():
     np.save("data.npy", data)
     np.save("responsibilities.npy", responsibilities.T)
     np.save("means.npy", gmm.means)
+    np.save("weights.npy", gmm.weights)
+    np.save("covs.npy", gmm.covs)
