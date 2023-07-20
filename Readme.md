@@ -36,3 +36,25 @@ tutorial$ # Create virtual environment and install dependencies
 tutorial$ poetry env use python3.11 # Optional
 tutorial$ poetry install
 ```
+
+## Setup the Rust benchmark
+
+```sh
+$ # Installation
+$ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+$ rustup update # Optional: Update the tool chain
+$ cd tutorial && git checkout rust-examples
+tutorial$ # git checkout rust-implementation # spoiler alert!
+tutorial$ (cd data; poetry run data) # we need data for the experiments
+tutorial$ cargo run --example read_data
+tutorial$ # cargo bench # run benchmarks later
+```
+
+## Setup the extension
+
+```sh
+tutorial$ git checkout extension-skeleton
+tutorial$ # git checkout extension-final # spoiler alert!
+tutorial$ maturin develop -r --strip # Builds the extensions and adds it to the venv
+tutorial$ maturin build -r --strip # Creates a binary wheel
+```
